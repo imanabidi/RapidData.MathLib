@@ -4,26 +4,28 @@ using System.Linq;
 namespace RapidData.MathLib
 {
     public class MathLib
-    { 
-        public FactorialMode FactorialMode { get; set; }
+    {
+        public FactorialMethodType FactorialMethod { get; set; }
+        public FactorialModeType FactorialMode { get; set; }
 
-        public MathLib(FactorialMode factorialMode)
+        public MathLib(FactorialMethodType factorialMethod, FactorialModeType factorialMode)
         {
+            FactorialMethod = factorialMethod;
             FactorialMode = factorialMode;
         }
 
-        public int Factorial(int number)
+        public long Factorial(int number)
         {
-            switch (FactorialMode)
+            switch (FactorialMethod)
             {
-                case FactorialMode.Recursion:
+                case FactorialMethodType.Recursion:
                     return FactorialWithRecursion(number);
                 default:
                     return FactorialWithAggregation(number);
             }
         }
 
-        private int FactorialWithRecursion(int number)
+        private long FactorialWithRecursion(int number)
         {
             if (number == 0)
             {
@@ -33,20 +35,50 @@ namespace RapidData.MathLib
             return FactorialWithRecursion(number - 1) * number;
         }
 
-        private int FactorialWithAggregation(int number)
+        private long FactorialWithAggregation(int number)
         {
+            // todo: add guard
             if (number == 0)
             {
                 return 1;
             }
 
-
-            // todo: add guard
             var numbersRange = Enumerable.Range(1, number);
-            var aggregatedResult = numbersRange.Aggregate((x, y) => x * y);
+            Func<int, int, int> aggregateFunc;
 
+            switch (FactorialMode)
+            {
+                case FactorialModeType.Standard:
+                    aggregateFunc = (x, y) => x * y;
+                    break;
+
+                case FactorialModeType.Uneven:
+                    aggregateFunc = (x, y) =>
+                    {
+                        if (y % 2 == 0)
+                        {
+                            y = 1;
+                        }
+                        return x * y;
+                    };
+                    break;
+
+                case FactorialModeType.Square:
+                    aggregateFunc = (x, y) => x * (int)Math.Pow(y, 2);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+
+            int aggregatedResult = numbersRange.Aggregate(aggregateFunc); ;
+            // uneven
+            // in func we check if it is a odd or even number 
+            // if even pass 1 and odd usuall number
             return aggregatedResult;
         }
+
 
     }
 }

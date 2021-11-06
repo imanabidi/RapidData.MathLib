@@ -1,6 +1,6 @@
 ﻿namespace RapidData.MathLib
 {
-    public enum FactorialMode
+    public enum FactorialMethodType
     {
         Recursion,
         Aggregation
