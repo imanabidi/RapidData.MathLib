@@ -43,8 +43,8 @@ namespace RapidData.MathLib
                 return 1;
             }
 
-            var numbersRange = Enumerable.Range(1, number);
-            Func<int, int, int> aggregateFunc;
+            var numbersRange = Enumerable.Range(1, number).Select(i => (long)i);
+            Func<long, long, long> aggregateFunc;
 
             switch (FactorialMode)
             {
@@ -64,7 +64,7 @@ namespace RapidData.MathLib
                     break;
 
                 case FactorialModeType.Square:
-                    aggregateFunc = (x, y) => x * (int)Math.Pow(y, 2);
+                    aggregateFunc = (x, y) => x * (long)Math.Pow(y, 2);
                     break;
 
                 default:
@@ -72,10 +72,8 @@ namespace RapidData.MathLib
             }
 
 
-            int aggregatedResult = numbersRange.Aggregate(aggregateFunc); ;
-            // uneven
-            // in func we check if it is a odd or even number 
-            // if even pass 1 and odd usuall number
+            long aggregatedResult = numbersRange.Aggregate(aggregateFunc); ;
+
             return aggregatedResult;
         }
 
