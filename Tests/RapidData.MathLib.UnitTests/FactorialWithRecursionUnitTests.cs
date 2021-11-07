@@ -1,6 +1,4 @@
 using System;
-using System.Globalization;
-using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RapidData.MathLib.EnumTypes;
 
