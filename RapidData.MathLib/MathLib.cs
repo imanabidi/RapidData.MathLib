@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Numerics;
 
 namespace RapidData.MathLib
 {
@@ -14,7 +15,7 @@ namespace RapidData.MathLib
             FactorialMode = factorialMode;
         }
 
-        public long Factorial(int number)
+        public BigInteger Factorial(int number)
         {
             switch (FactorialMethod)
             {
@@ -35,7 +36,7 @@ namespace RapidData.MathLib
             return FactorialWithRecursion(number - 1) * number;
         }
 
-        private long FactorialWithAggregation(int number)
+        private BigInteger FactorialWithAggregation(int number)
         {
             // todo: add guard
             if (number == 0)
@@ -43,13 +44,13 @@ namespace RapidData.MathLib
                 return 1;
             }
 
-            var numbersRange = Enumerable.Range(1, number).Select(i => (long)i);
-            Func<long, long, long> aggregateFunc;
+            var numbersRange = Enumerable.Range(1, number).Select(i => (BigInteger)i);
+            Func<BigInteger, BigInteger, BigInteger> aggregateFunc;
 
             switch (FactorialMode)
             {
                 case FactorialModeType.Standard:
-                    aggregateFunc = (x, y) => x * y;
+                    aggregateFunc = BigInteger.Multiply;
                     break;
 
                 case FactorialModeType.Uneven:
@@ -64,7 +65,7 @@ namespace RapidData.MathLib
                     break;
 
                 case FactorialModeType.Square:
-                    aggregateFunc = (x, y) => x * (long)Math.Pow(y, 2);
+                    aggregateFunc = (x, y) => BigInteger.Multiply(x, BigInteger.Pow(y, 2));
                     break;
 
                 default:
@@ -72,7 +73,7 @@ namespace RapidData.MathLib
             }
 
 
-            long aggregatedResult = numbersRange.Aggregate(aggregateFunc); ;
+            BigInteger aggregatedResult = numbersRange.Aggregate(aggregateFunc); ;
 
             return aggregatedResult;
         }

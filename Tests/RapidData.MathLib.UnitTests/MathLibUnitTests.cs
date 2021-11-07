@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace RapidData.MathLib.UnitTests
@@ -13,12 +15,14 @@ namespace RapidData.MathLib.UnitTests
         [DataRow(9, 362880)]
         [DataRow(11, 39916800)]
         [DataRow(12, 479001600)]
+        [DataRow(20, 2432902008176640000)]
         [DataTestMethod]
-        public void FactorialWithRecursionMethodShouldSucceed(int n, int result)
+        public void Factorial_WithRecursionMethod_ShouldSucceed(int n, object expectedResult)
         {
             var mathLib = new MathLib(FactorialMethodType.Recursion, FactorialModeType.Standard);
 
-            Assert.IsTrue(mathLib.Factorial(n) == result);
+            var expectedResultBigInteger = BigInteger.Parse(expectedResult.ToString(), NumberStyles.Any, new CultureInfo("de-DE"));
+            Assert.IsTrue(mathLib.Factorial(n) == expectedResultBigInteger);
         }
 
         [DataRow(0, 1)]
@@ -29,12 +33,15 @@ namespace RapidData.MathLib.UnitTests
         [DataRow(9, 362880)]
         [DataRow(11, 39916800)]
         [DataRow(12, 479001600)]
+        [DataRow(12, 479001600)]
+        [DataRow(20, 2432902008176640000)]
         [DataTestMethod]
-        public void FactorialWithAggregationMethodShouldSucceed(int n, int result)
+        public void Factorial_WithAggregationMethod_ShouldSucceed(int n, object expectedResult)
         {
             var mathLib = new MathLib(FactorialMethodType.Aggregation, FactorialModeType.Standard);
 
-            Assert.IsTrue(mathLib.Factorial(n) == result);
+            var expectedResultBigInteger = BigInteger.Parse(expectedResult.ToString(), NumberStyles.Any, new CultureInfo("de-DE"));
+            Assert.IsTrue(mathLib.Factorial(n) == expectedResultBigInteger);
         }
 
         [DataRow(0, 1)]
@@ -45,12 +52,15 @@ namespace RapidData.MathLib.UnitTests
         [DataRow(9, 945)]
         [DataRow(11, 10395)]
         [DataRow(12, 10395)]
+        [DataRow(19, 654729075)]
+        [DataRow(20, 654729075)]
         [DataTestMethod]
-        public void UnevenFactorialShouldSucceed(int n, long result)
+        public void Factorial_WithUnevenMode_ShouldSucceed(int n, object expectedResult)
         {
             var mathLib = new MathLib(FactorialMethodType.Aggregation, FactorialModeType.Uneven);
 
-            Assert.IsTrue(mathLib.Factorial(n) == result);
+            var expectedResultBigInteger = BigInteger.Parse(expectedResult.ToString(), NumberStyles.Any, new CultureInfo("de-DE"));
+            Assert.IsTrue(mathLib.Factorial(n) == expectedResultBigInteger);
         }
 
         [DataRow(0, 1)]
@@ -59,14 +69,17 @@ namespace RapidData.MathLib.UnitTests
         [DataRow(5, 14400)]
         [DataRow(8, 1625702400)]
         [DataRow(9, 131681894400)]
-        [DataRow(11,1593350922240000 )]
+        [DataRow(11, 1593350922240000)]
         [DataRow(12, 229442532802560000)]
+        [DataRow(20, "5,9190121813899276854174416896e36")]
         [DataTestMethod]
-        public void SquareFactorialShouldSucceed(int n, long result)
+        public void Factorial_WithSquareMode_ShouldSucceed(int n, object expectedResult)
         {
             var mathLib = new MathLib(FactorialMethodType.Aggregation, FactorialModeType.Square);
 
-            Assert.IsTrue(mathLib.Factorial(n) == result);
+            var expectedResultBigInteger = BigInteger.Parse(expectedResult.ToString(), NumberStyles.Any, new CultureInfo("de-DE"));
+            var mathLibRes = mathLib.Factorial(n);
+            Assert.IsTrue(mathLibRes == expectedResultBigInteger);
         }
 
     }
