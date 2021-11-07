@@ -1,4 +1,4 @@
-﻿namespace RapidData.MathLib
+﻿namespace RapidData.MathLib.EnumTypes
 {
     public enum FactorialModeType
     {

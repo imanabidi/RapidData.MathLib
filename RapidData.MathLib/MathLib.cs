@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+using RapidData.MathLib.EnumTypes;
 
 namespace RapidData.MathLib
 {
@@ -17,23 +18,28 @@ namespace RapidData.MathLib
 
         public BigInteger Factorial(int number)
         {
-            switch (FactorialMethod)
+            return FactorialMethod switch
             {
-                case FactorialMethodType.Recursion:
-                    return FactorialWithRecursion(number);
-                default:
-                    return FactorialWithAggregation(number);
-            }
+                FactorialMethodType.Recursion => FactorialWithRecursion(number),
+                FactorialMethodType.Aggregation => FactorialWithAggregation(number),
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
-        private long FactorialWithRecursion(int number)
+        private BigInteger FactorialWithRecursion(int number)
         {
             if (number == 0)
             {
                 return 1;
             }
 
-            return FactorialWithRecursion(number - 1) * number;
+            return FactorialMode switch
+            {
+                FactorialModeType.Standard => FactorialWithRecursion(number - 1) * number,
+                FactorialModeType.Uneven => FactorialWithRecursion(number - 1) * ((number % 2 == 0) ? 1 : number),
+                FactorialModeType.Square => FactorialWithRecursion(number - 1) * BigInteger.Pow(number, 2),
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
         private BigInteger FactorialWithAggregation(int number)
@@ -45,39 +51,16 @@ namespace RapidData.MathLib
             }
 
             var numbersRange = Enumerable.Range(1, number).Select(i => (BigInteger)i);
-            Func<BigInteger, BigInteger, BigInteger> aggregateFunc;
 
-            switch (FactorialMode)
+            Func<BigInteger, BigInteger, BigInteger> aggregateFunc = FactorialMode switch
             {
-                case FactorialModeType.Standard:
-                    aggregateFunc = BigInteger.Multiply;
-                    break;
+                FactorialModeType.Standard => (aggregated, y) => BigInteger.Multiply(aggregated, y),
+                FactorialModeType.Uneven => (aggregated, y) => (y % 2 == 0) ? aggregated : aggregated * y,
+                FactorialModeType.Square => (aggregated, y) => BigInteger.Multiply(aggregated, BigInteger.Pow(y, 2)),
+                _ => throw new ArgumentOutOfRangeException()
+            };
 
-                case FactorialModeType.Uneven:
-                    aggregateFunc = (x, y) =>
-                    {
-                        if (y % 2 == 0)
-                        {
-                            y = 1;
-                        }
-                        return x * y;
-                    };
-                    break;
-
-                case FactorialModeType.Square:
-                    aggregateFunc = (x, y) => BigInteger.Multiply(x, BigInteger.Pow(y, 2));
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-
-            BigInteger aggregatedResult = numbersRange.Aggregate(aggregateFunc); ;
-
-            return aggregatedResult;
+            return numbersRange.Aggregate(aggregateFunc);
         }
-
-
     }
 }
