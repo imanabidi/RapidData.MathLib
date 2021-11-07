@@ -9,6 +9,7 @@ namespace RapidData.MathLib
     public class MathLib
     {
         public FactorialMethodType FactorialMethod { get; set; }
+
         public FactorialModeType FactorialMode { get; set; }
 
         public MathLib(FactorialMethodType factorialMethod, FactorialModeType factorialMode)

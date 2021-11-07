@@ -8,7 +8,7 @@ namespace RapidData.MathLib.UnitTests
     public class FactorialWithAggregationUnitTests
     {
         [TestMethod]
-        public void RecursionFactorial_WithNegativeNumber_ShouldFail()
+        public void AggregationFactorial_WithNegativeNumber_ShouldFail()
         {
             var mathLib = new MathLib(FactorialMethodType.Aggregation, FactorialModeType.Standard);
             Assert.ThrowsException<ArgumentException>(() => mathLib.Factorial(-1));
