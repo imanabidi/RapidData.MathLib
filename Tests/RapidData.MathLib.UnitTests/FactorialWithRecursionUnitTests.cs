@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,6 +9,13 @@ namespace RapidData.MathLib.UnitTests
     [TestClass]
     public class FactorialWithRecursionUnitTests
     {
+        [TestMethod]
+        public void RecursionFactorial_WithNegativeNumber_ShouldFail()
+        {
+            var mathLib = new MathLib(FactorialMethodType.Recursion, FactorialModeType.Standard);
+            Assert.ThrowsException<ArgumentException>(() => mathLib.Factorial(-1));
+        }
+
         [DataRow(0, 1)]
         [DataRow(1, 1)]
         [DataRow(3, 6)]
@@ -22,10 +30,9 @@ namespace RapidData.MathLib.UnitTests
         public void RecursionFactorial_ShouldSucceed(int n, object expectedResult)
         {
             var mathLib = new MathLib(FactorialMethodType.Recursion, FactorialModeType.Standard);
-
-            var expectedResultBigInteger = BigInteger.Parse(expectedResult.ToString(), NumberStyles.Any, new CultureInfo("de-DE"));
             var mathLibFactorialResult = mathLib.Factorial(n);
-            Assert.IsTrue(mathLibFactorialResult == expectedResultBigInteger);
+             
+            Assert.IsTrue(mathLibFactorialResult == Extensions.ParseObjectToBigInteger(expectedResult));
         }
 
         [DataRow(0, 1)]
@@ -42,10 +49,9 @@ namespace RapidData.MathLib.UnitTests
         public void RecursionFactorial_WithUnevenMode_ShouldSucceed(int n, object expectedResult)
         {
             var mathLib = new MathLib(FactorialMethodType.Recursion, FactorialModeType.Uneven);
-
-            var expectedResultBigInteger = BigInteger.Parse(expectedResult.ToString(), NumberStyles.Any, new CultureInfo("de-DE"));
             var mathLibFactorialResult = mathLib.Factorial(n);
-            Assert.IsTrue(mathLibFactorialResult == expectedResultBigInteger);
+             
+            Assert.IsTrue(mathLibFactorialResult == Extensions.ParseObjectToBigInteger(expectedResult));
         }
 
         [DataRow(0, 1)]
@@ -62,11 +68,9 @@ namespace RapidData.MathLib.UnitTests
         public void RecursionFactorial_WithSquareMode_ShouldSucceed(int n, object expectedResult)
         {
             var mathLib = new MathLib(FactorialMethodType.Recursion, FactorialModeType.Square);
-
-            var expectedResultBigInteger = BigInteger.Parse(expectedResult.ToString(), NumberStyles.Any, new CultureInfo("de-DE"));
             var mathLibFactorialResult = mathLib.Factorial(n);
-            Assert.IsTrue(mathLibFactorialResult == expectedResultBigInteger);
+             
+            Assert.IsTrue(mathLibFactorialResult == Extensions.ParseObjectToBigInteger(expectedResult));
         }
-
     }
 }

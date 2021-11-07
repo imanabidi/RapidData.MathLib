@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+using Ardalis.GuardClauses;
 using RapidData.MathLib.EnumTypes;
 
 namespace RapidData.MathLib
@@ -18,6 +19,8 @@ namespace RapidData.MathLib
 
         public BigInteger Factorial(int number)
         {
+            Guard.Against.Negative(number, nameof(number));
+
             return FactorialMethod switch
             {
                 FactorialMethodType.Recursion => FactorialWithRecursion(number),
